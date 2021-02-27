@@ -6,7 +6,7 @@ interface FormButtonProps {
 }
 
 const StyledButton = styled.button`
-  background-color: #238636;
+  background-color: #427dc1;
   color: white;
   border: none;
   border-radius: 0.3rem;
@@ -18,7 +18,7 @@ const StyledButton = styled.button`
   transition: background-color 0.15s ease-out;
 
   :hover {
-    background-color: #319d43;
+    background-color: #1c5899;
     cursor: pointer;
     transition: background-color 0.15s ease-in;
   }

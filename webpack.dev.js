@@ -14,7 +14,6 @@ module.exports = merge(common, {
     hot: true,
     stats: 'minimal',
     historyApiFallback: true,
-    writeToDisk: true,
   },
   watchOptions: {
     aggregateTimeout: 300,

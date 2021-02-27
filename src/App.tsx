@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import DataProvider from './DataContext/DataContext';
-import Header from './components/Header/Header';
 import StepOne from './views/StepOne/StepOne';
 import StepTwo from './views/StepTwo/StepTwo';
 
@@ -20,7 +19,6 @@ const StyledAppContainer = styled.div`
 const App: React.FC = () => (
   <StyledAppContainer>
     <DataProvider>
-      <Header />
       <Router>
         <Switch>
           <Route exact path="/" component={StepOne} />
