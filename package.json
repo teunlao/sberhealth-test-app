@@ -1,10 +1,11 @@
 {
-  "name": "sberzdorovye-test",
+  "name": "sberhealth-test-app",
   "version": "1.0.0",
   "scripts": {
-    "serve": "webpack-dev-server",
-    "docker:serve": "webpack-dev-server --host 0.0.0.0",
-    "build": "webpack"
+    "serve": "webpack-dev-server --config webpack.dev.js",
+    "docker:serve": "webpack-dev-server --config webpack.dev.js --host 0.0.0.0",
+    "build": "webpack --config webpack.prod.js",
+    "deploy": "vercel"
   },
   "author": "Osipov Dmitriy",
   "license": "ISC",
@@ -35,6 +36,7 @@
     "webpack": "^5.24.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3",
     "webpackbar": "^5.0.0-3"
   },
   "dependencies": {
