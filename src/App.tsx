@@ -1,46 +1,34 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import FormTextField from "./components/FornTextField/FormTextField";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import styled from 'styled-components';
+import DataProvider from './DataContext/DataContext';
+import Header from './components/Header/Header';
+import StepOne from './views/StepOne/StepOne';
+import StepTwo from './views/StepTwo/StepTwo';
 
-const App: React.FC = () => {
-  const { register, handleSubmit, watch, errors } = useForm();
-  const onSubmit = (data: any) => {
-    const http = new XMLHttpRequest()
-    const url = 'test.php'
-    http.open('GET', url, true);
-    http.setRequestHeader('Content-type', 'application/json');
-    http.send(data)
+const StyledAppContainer = styled.div`
+  background-color: #0D1117;
+  color: #ffffff;
+  font-family: Helvetica Neue, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+`;
 
-    console.log('QWE');
-
-    http.onload = function () {
-      // do something to response
-      // eslint-disable-next-line react/no-this-in-sfc
-      console.log(this.responseText);
-    };
-
-    http.onreadystatechange = () => {
-      console.log('http', http.response);
-
-
-
-
-      // if(http.readyState === 4 && http.status === 200) {
-      //   alert(http.responseText);
-      // }
-    }
-  }
-
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} method="post">
-      <h1>Оформление заказа222222222w</h1>
-      <input name="firstName" ref={register({ required: true, maxLength: 20 })} />
-      <FormTextField label="Email" errors={{}} />
-
-      <input type="submit" />
-    </form>
-  );
-};
+const App: React.FC = () => (
+  <StyledAppContainer>
+    <DataProvider>
+      <Header />
+      <Router>
+        <Switch>
+          <Route exact path="/" component={StepOne} />
+          <Route exact path="/step2" component={StepTwo} />
+        </Switch>
+      </Router>
+    </DataProvider>
+  </StyledAppContainer>
+);
 
 export default App;
