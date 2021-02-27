@@ -43,7 +43,7 @@ module.exports = (env = {}) => ({
       new CleanWebpackPlugin(),
       new CopyPlugin({
         patterns: [
-          { from: 'server/test.php', to: 'test.php' }
+          { from: 'api/test.php', to: 'test.php' }
         ]
       }),
       new HtmlWebpackPlugin({
