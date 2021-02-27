@@ -2,8 +2,8 @@
   "name": "sberzdorovye-test",
   "version": "1.0.0",
   "scripts": {
-    "serve": "webpack-dev-server --port 4071",
-    "docker:serve": "webpack-dev-server --host 0.0.0.0 --hot",
+    "serve": "webpack-dev-server",
+    "docker:serve": "webpack-dev-server --host 0.0.0.0",
     "build": "webpack"
   },
   "author": "Osipov Dmitriy",
