@@ -4,11 +4,11 @@ const StyledMainContainer = styled.div`
   max-width: 800px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding: 1.25rem
+  padding: 1.5rem;
 `;
 
 export default StyledMainContainer

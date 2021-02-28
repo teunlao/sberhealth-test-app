@@ -1,16 +1,38 @@
 import styled from 'styled-components';
 
-
-
 const StyledStepHeader = styled.h2`
   font-size: 1.3rem;
-  border-bottom: 1px solid #313135;
   letter-spacing: 0.06rem;
   width: 100%;
-  padding: 0.4rem;
-  color: #c9d1d9;
+  color: ${({ theme }) => theme.colors.secondaryText};
   text-align: center;
   transition: border-bottom-color 0.5s ease;
-`
+  position: relative;
+  margin: 10px auto 20px;
+  overflow-x: hidden;
 
-export default StyledStepHeader
+  :before {
+    position: relative;
+    margin-left: -50%;
+    right: 1rem;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    height: 0.08rem;
+    vertical-align: middle;
+    width: 50%;
+    display: inline-block;
+    content: '';
+  }
+  :after {
+    position: relative;
+    margin-right: -50%;
+    left: 1rem;
+    background-color: ${({ theme }) => theme.colors.secondary};
+    height: 0.08rem;
+    vertical-align: middle;
+    width: 50%;
+    display: inline-block;
+    content: '';
+  }
+`;
+
+export default StyledStepHeader;
