@@ -40,11 +40,9 @@ const schema = yup.object().shape({
   phone: yup
     .string()
     .required('Поле телефон является обязательным')
-    .test('Card Test', 'Поле телефон должно иметь корректный  формат', (value = '') => {
-      const phoneString = normalizePhoneNumber(value);
-      console.log(phoneString);
-      return isValidPhoneNumber(phoneString);
-    }),
+    .test('phone', 'Поле телефон должно иметь корректный  формат', (value = '') =>
+      isValidPhoneNumber(normalizePhoneNumber(value)),
+    ),
 });
 
 const StepOne: React.FC = () => {
@@ -74,39 +72,31 @@ const StepOne: React.FC = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextField
           label="Имя"
-          error={!!errors.firstName}
           errorMessage={errors?.firstName?.message}
           name="firstName"
           type="text"
           ref={register}
-          required
         />
         <FormTextField
           label="Фамилия"
-          error={!!errors.lastName}
           errorMessage={errors?.lastName?.message}
           name="lastName"
           type="text"
           ref={register}
-          required
         />
         <FormTextField
           label="Email"
-          error={!!errors.email}
           errorMessage={errors?.email?.message}
           name="email"
           type="email"
           ref={register}
-          required
         />
         <FormTextField
           label="Телефон"
-          error={!!errors.phone}
           errorMessage={errors?.phone?.message}
           name="phone"
           type="tel"
           ref={register}
-          required
           onChange={(event) => {
             event.target.value = normalizePhoneNumber(event.target.value);
           }}
