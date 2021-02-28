@@ -4,29 +4,31 @@ import styled from 'styled-components';
 import DataProvider from './DataContext/DataContext';
 import StepOne from './views/StepOne/StepOne';
 import StepTwo from './views/StepTwo/StepTwo';
+import AppTheme from './components/styled/AppTheme';
 
 const StyledAppContainer = styled.div`
-  background-color: #0D1117;
-  color: #ffffff;
-  font-family: Helvetica Neue, sans-serif;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.primaryText};
+  font-family: ${({ theme }) => theme.fontFamily};
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const App: React.FC = () => (
-  <StyledAppContainer>
-    <DataProvider>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={StepOne} />
-          <Route exact path="/step2" component={StepTwo} />
-        </Switch>
-      </Router>
-    </DataProvider>
-  </StyledAppContainer>
+  <AppTheme>
+    <StyledAppContainer className="test">
+      <DataProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={StepOne} />
+            <Route path="/step2" component={StepTwo} />
+          </Switch>
+        </Router>
+      </DataProvider>
+    </StyledAppContainer>
+  </AppTheme>
 );
 
 export default App;

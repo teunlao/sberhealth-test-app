@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import SecondaryButton from '../styled/SecondaryButton';
 
 const StyledFormButtonGroup = styled.div`
   display: flex;
@@ -13,28 +14,6 @@ export enum ReceivingTypes {
   DELIVERY = 'delivery',
   PICKUP = 'pickup',
 }
-
-const StyledButton = styled.button<{ active: boolean }>`
-  position: relative;
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.inputBackground};
-  color: ${({ theme }) => theme.colors.primaryText};
-  border: 0.1rem solid;
-  border-color: ${({ theme, active }) => active ? theme.colors.primary : theme.colors.secondary};
-  border-radius: ${({ theme }) => theme.sizes.radius};
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  letter-spacing: 0.08rem;
-  font-family: ${({ theme }) => theme.fontFamily};
-  transition: border 0.15s ease-out;
-  z-index: ${({ active }) => (active ? 2 : 1)};
-  outline: none;
-  :hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-    cursor: pointer;
-    transition: border 0.15s ease-in;
-  }
-`;
 
 interface FormButtonGroupProps {
   onChange: (value: ReceivingTypes) => void;
@@ -52,23 +31,23 @@ const FormButtonGroup: React.FC<FormButtonGroupProps> = ({ onChange }) => {
   }, [receivingType]);
 
   return (
-    <StyledFormButtonGroup>
-      <StyledButton
+    <StyledFormButtonGroup className="FormInput">
+      <SecondaryButton
         ref={deliveryBtn}
         onClick={() => setReceivingType(ReceivingTypes.DELIVERY)}
         type="button"
         active={receivingType === ReceivingTypes.DELIVERY}
       >
         Доставка
-      </StyledButton>
-      <StyledButton
+      </SecondaryButton>
+      <SecondaryButton
         ref={pickupBtn}
         onClick={() => setReceivingType(ReceivingTypes.PICKUP)}
         type="button"
         active={receivingType === ReceivingTypes.PICKUP}
       >
         Самовывоз
-      </StyledButton>
+      </SecondaryButton>
     </StyledFormButtonGroup>
   );
 };

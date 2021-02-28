@@ -8,7 +8,7 @@ import Form from '../../components/Form/Form';
 import FormTextField from '../../components/FornTextField/FormTextField';
 import { useData } from '../../DataContext/DataContext';
 import StyledMainContainer from '../../components/styled/StyledMainContainer';
-import FormButton from '../../components/FormButton/FormButton';
+import PrimaryButton from '../../components/styled/PrimaryButton';
 import StyledStepHeader from '../../components/styled/StyledStepHeader';
 
 const normalizePhoneNumber = (value: string): string => {
@@ -60,10 +60,10 @@ const StepOne: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = () => {
-    console.log(123);
+  const onSubmit = (formData: any) => {
+    console.log('formData', formData);
+    setValues(formData);
     history.push('./step2');
-    setValues(data);
   };
 
   return (
@@ -101,7 +101,7 @@ const StepOne: React.FC = () => {
             event.target.value = normalizePhoneNumber(event.target.value);
           }}
         />
-        <FormButton submit>Продолжить</FormButton>
+        <PrimaryButton type="submit">Продолжить</PrimaryButton>
       </Form>
     </StyledMainContainer>
   );

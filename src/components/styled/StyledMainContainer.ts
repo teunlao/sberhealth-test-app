@@ -6,8 +6,8 @@ const StyledMainContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  justify-content: center;
   align-items: center;
+  margin-top: 2rem;
   padding: 1.5rem;
 `;
 

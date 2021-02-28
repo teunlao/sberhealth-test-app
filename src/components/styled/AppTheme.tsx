@@ -11,6 +11,7 @@ const theme = {
     primaryText: '#ffffff',
     secondaryText: '#c9d1d9',
     inputBackground: '#090d13',
+    buttonBackground: '#21262D',
     background: '#0d1117'
   },
   sizes: {
