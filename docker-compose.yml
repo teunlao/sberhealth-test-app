@@ -2,17 +2,6 @@ version: '3.8'
 
 # Workflow
 services:
-  app:
-    build:
-      context: .
-      dockerfile: compose/node/Dockerfile
-    ports:
-      - "3030:8080"
-    volumes:
-      - "./:/app"
-    networks:
-      - sberhealth
-
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -29,7 +18,18 @@ services:
     expose:
       - 9000
     volumes:
-    - ./dist:/app
+      - ./dist:/app
+    networks:
+      - sberhealth
+
+  app:
+    build:
+      context: .
+      dockerfile: compose/node/Dockerfile
+    ports:
+      - "3030:8080"
+    volumes:
+      - "./:/app"
     networks:
       - sberhealth
 

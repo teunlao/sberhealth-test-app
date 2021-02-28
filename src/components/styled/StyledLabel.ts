@@ -6,4 +6,4 @@ const StyledLabel = styled.label<{ isError?: boolean }>`
   color: ${({ isError, theme }) => (isError ? theme.colors.error : theme.colors.secondaryText)};
 `;
 
-export default StyledLabel
+export default StyledLabel;

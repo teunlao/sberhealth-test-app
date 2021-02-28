@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import StyledErrorMessage from '../styled/StyledErrorMessage';
+import StyledFormInputWrapper from '../styled/StyledFormInputWrapper';
 import StyledInput from '../styled/StyledInput';
 import StyledInputContainer from '../styled/StyledInputContainer';
 import StyledLabel from '../styled/StyledLabel';
@@ -15,21 +16,23 @@ interface FormInputProps {
 
 const FormTextField = forwardRef<HTMLInputElement, FormInputProps>(
   ({ label, name, type, placeholder, errorMessage, onChange }, ref) => (
-    <StyledInputContainer className="FormInput">
-      <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>
-        {label}
-      </StyledLabel>
-      <StyledInput
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        id={`input_${name}`}
-        ref={ref}
-        isError={!!errorMessage}
-        onChange={onChange}
-      />
-      <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
-    </StyledInputContainer>
+    <StyledFormInputWrapper>
+      <StyledInputContainer>
+        <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>
+          {label}
+        </StyledLabel>
+        <StyledInput
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          id={`input_${name}`}
+          ref={ref}
+          isError={!!errorMessage}
+          onChange={onChange}
+        />
+        <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
+      </StyledInputContainer>
+    </StyledFormInputWrapper>
   ),
 );
 

@@ -24,4 +24,4 @@ const StyledInput = styled.input<{ isError?: boolean }>`
   }
 `;
 
-export default StyledInput
+export default StyledInput;

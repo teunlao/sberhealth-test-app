@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const SecondaryButton = styled.button<{ active: boolean }>`
+const SecondaryButton = styled.button<{ active?: boolean }>`
   position: relative;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.buttonBackground};
   z-index: ${({ active }) => (active ? 2 : 1)};
   color: ${({ theme }) => theme.colors.primaryText};
   border: 0.1rem solid;
-  border-color: ${({ theme, active }) => active ? theme.colors.primary : theme.colors.secondary};
+  border-color: ${({ theme, active }) => (active ? theme.colors.primary : theme.colors.secondary)};
   border-radius: ${({ theme }) => theme.sizes.radius};
   padding: 0.75rem 1.5rem;
   font-size: 1rem;

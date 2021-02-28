@@ -10,10 +10,12 @@ module.exports = merge(common, {
       patterns: [{ from: 'api/test.php', to: 'test.php' }],
     }),
   ],
+  devtool: 'source-map',
   devServer: {
     hot: true,
     stats: 'minimal',
     historyApiFallback: true,
+    writeToDisk: true,
   },
   watchOptions: {
     aggregateTimeout: 300,

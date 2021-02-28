@@ -7,4 +7,4 @@ const StyledErrorMessage = styled.div`
   min-height: 1rem;
 `;
 
-export default StyledErrorMessage
+export default StyledErrorMessage;

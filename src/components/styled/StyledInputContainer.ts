@@ -6,4 +6,4 @@ const StyledInputContainer = styled.div`
   width: 100%;
 `;
 
-export default StyledInputContainer
+export default StyledInputContainer;

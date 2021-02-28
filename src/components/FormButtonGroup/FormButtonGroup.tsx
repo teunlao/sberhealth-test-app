@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import SecondaryButton from '../styled/SecondaryButton';
+import StyledFormInputWrapper from '../styled/StyledFormInputWrapper';
 
 const StyledFormButtonGroup = styled.div`
   display: flex;
@@ -21,34 +22,35 @@ interface FormButtonGroupProps {
 
 const FormButtonGroup: React.FC<FormButtonGroupProps> = ({ onChange }) => {
   const [receivingType, setReceivingType] = useState<ReceivingTypes>(ReceivingTypes.DELIVERY);
-  const deliveryBtn = useRef<HTMLButtonElement>(null)
-  const pickupBtn = useRef<HTMLButtonElement>(null)
+  const deliveryBtn = useRef<HTMLButtonElement>(null);
+  const pickupBtn = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    console.log(receivingType);
-    deliveryBtn?.current?.focus()
+    deliveryBtn?.current?.focus();
     onChange(receivingType);
   }, [receivingType]);
 
   return (
-    <StyledFormButtonGroup className="FormInput">
-      <SecondaryButton
-        ref={deliveryBtn}
-        onClick={() => setReceivingType(ReceivingTypes.DELIVERY)}
-        type="button"
-        active={receivingType === ReceivingTypes.DELIVERY}
-      >
-        Доставка
-      </SecondaryButton>
-      <SecondaryButton
-        ref={pickupBtn}
-        onClick={() => setReceivingType(ReceivingTypes.PICKUP)}
-        type="button"
-        active={receivingType === ReceivingTypes.PICKUP}
-      >
-        Самовывоз
-      </SecondaryButton>
-    </StyledFormButtonGroup>
+    <StyledFormInputWrapper>
+      <StyledFormButtonGroup>
+        <SecondaryButton
+          ref={deliveryBtn}
+          onClick={() => setReceivingType(ReceivingTypes.DELIVERY)}
+          type="button"
+          active={receivingType === ReceivingTypes.DELIVERY}
+        >
+          Доставка
+        </SecondaryButton>
+        <SecondaryButton
+          ref={pickupBtn}
+          onClick={() => setReceivingType(ReceivingTypes.PICKUP)}
+          type="button"
+          active={receivingType === ReceivingTypes.PICKUP}
+        >
+          Самовывоз
+        </SecondaryButton>
+      </StyledFormButtonGroup>
+    </StyledFormInputWrapper>
   );
 };
 

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import StyledInputContainer from '../styled/StyledInputContainer';
 import StyledLabel from '../styled/StyledLabel';
 import StyledErrorMessage from '../styled/StyledErrorMessage';
+import StyledFormInputWrapper from '../styled/StyledFormInputWrapper';
 
 interface FormInputProps {
   label: string;
@@ -36,20 +37,22 @@ const StyledTextArea = styled.textarea<{ isError?: boolean }>`
 
 const FormTextArea = forwardRef<HTMLTextAreaElement, FormInputProps>(
   ({ label, name, type, placeholder, errorMessage, onChange }, ref) => (
-    <StyledInputContainer className="FormInput">
-      <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>
-        {label}
-      </StyledLabel>
-      <StyledTextArea
-        name={name}
-        placeholder={placeholder}
-        id={`input_${name}`}
-        ref={ref}
-        isError={!!errorMessage}
-        onChange={onChange}
-      />
-      <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
-    </StyledInputContainer>
+    <StyledFormInputWrapper>
+      <StyledInputContainer>
+        <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>
+          {label}
+        </StyledLabel>
+        <StyledTextArea
+          name={name}
+          placeholder={placeholder}
+          id={`input_${name}`}
+          ref={ref}
+          isError={!!errorMessage}
+          onChange={onChange}
+        />
+        <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
+      </StyledInputContainer>
+    </StyledFormInputWrapper>
   ),
 );
 

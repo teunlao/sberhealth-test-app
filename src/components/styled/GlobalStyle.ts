@@ -16,6 +16,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100vh;
   }
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;

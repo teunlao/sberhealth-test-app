@@ -6,7 +6,7 @@ import React from 'react';
 import parsePhoneNumberFromString, { isValidPhoneNumber, AsYouType } from 'libphonenumber-js';
 import Form from '../../components/Form/Form';
 import FormTextField from '../../components/FornTextField/FormTextField';
-import { useData } from '../../DataContext/DataContext';
+import { FormProperties, useFormData } from '../../DataContext/DataContext';
 import StyledMainContainer from '../../components/styled/StyledMainContainer';
 import PrimaryButton from '../../components/styled/PrimaryButton';
 import StyledStepHeader from '../../components/styled/StyledStepHeader';
@@ -46,23 +46,22 @@ const schema = yup.object().shape({
 });
 
 const StepOne: React.FC = () => {
-  const { setValues, data } = useData();
+  const { formData, setFormData } = useFormData();
   const history = useHistory();
 
   const { register, handleSubmit, errors } = useForm({
     defaultValues: {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
     },
-    mode: 'all',
+    mode: 'onTouched',
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (formData: any) => {
-    console.log('formData', formData);
-    setValues(formData);
+  const onSubmit = (data: FormProperties) => {
+    setFormData(data);
     history.push('./step2');
   };
 
@@ -72,6 +71,7 @@ const StepOne: React.FC = () => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextField
           label="Имя"
+          placeholder="Иван"
           errorMessage={errors?.firstName?.message}
           name="firstName"
           type="text"
@@ -79,20 +79,15 @@ const StepOne: React.FC = () => {
         />
         <FormTextField
           label="Фамилия"
+          placeholder="Иванов"
           errorMessage={errors?.lastName?.message}
           name="lastName"
           type="text"
           ref={register}
         />
         <FormTextField
-          label="Email"
-          errorMessage={errors?.email?.message}
-          name="email"
-          type="email"
-          ref={register}
-        />
-        <FormTextField
           label="Телефон"
+          placeholder="+7 904 652 23 24"
           errorMessage={errors?.phone?.message}
           name="phone"
           type="tel"
@@ -100,6 +95,14 @@ const StepOne: React.FC = () => {
           onChange={(event) => {
             event.target.value = normalizePhoneNumber(event.target.value);
           }}
+        />
+        <FormTextField
+          label="Email"
+          placeholder="example@example.com"
+          errorMessage={errors?.email?.message}
+          name="email"
+          type="email"
+          ref={register}
         />
         <PrimaryButton type="submit">Продолжить</PrimaryButton>
       </Form>

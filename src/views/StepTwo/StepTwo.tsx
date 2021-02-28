@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Form from '../../components/Form/Form';
-import { useData } from '../../DataContext/DataContext';
+import { FormProperties, useFormData } from '../../DataContext/DataContext';
 import FormButtonGroup, { ReceivingTypes } from '../../components/FormButtonGroup/FormButtonGroup';
 import StyledMainContainer from '../../components/styled/StyledMainContainer';
 import StyledStepHeader from '../../components/styled/StyledStepHeader';
 import FormTextArea from '../../components/FormTextArea/FormTextArea';
-import FormDataList from '../../components/FormDataList/FormDataList';
-import FormTextField from '../../components/FornTextField/FormTextField';
-import PrimaryButton from '../../components/styled/PrimaryButton';
+import PrimaryButton, { Loader } from '../../components/styled/PrimaryButton';
 import StyledDivider from '../../components/styled/StyledDivider';
 import SecondaryButton from '../../components/styled/SecondaryButton';
+import FormDataList from '../../components/FormDataList/FormDataList';
+import FormTextField from '../../components/FornTextField/FormTextField';
+import ResultModal from '../../components/ResultModal/ResultModal';
+
+const StyledModalText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: ${({ theme }) => theme.colors.secondaryText};
+  div {
+    margin-top: 0.5rem;
+  }
+`;
 
 const StyledInputGroupRow = styled.div`
   display: flex;
   flex-direction: row;
+  flex: 1;
+
   > div:not(:first-child) {
     margin-left: 1rem;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 800px) {
     flex-direction: column;
     > div:not(:first-child) {
       margin-left: 0;
@@ -39,70 +54,133 @@ const StyledFormActions = styled.div`
   }
 `;
 
-const onBackClickHandler = () => {
-  console.log('HELLO');
-}
-
-const onSubmit = (data: any) => {
-  console.log(data);
-  const http = new XMLHttpRequest();
-  const url = 'test.php';
-  http.open('GET', url, true);
-  http.setRequestHeader('Content-type', 'application/json');
-  http.send(data);
-
-  http.onload = function () {
-    console.log(this.responseText);
-  };
-
-  http.onreadystatechange = () => {
-    console.log('http', http.response);
-  };
-};
-
-const schema = yup.object().shape({
-  country: yup
-    .string()
-    .max(255, 'Поле страна не должно содержать более 255 символов')
-    .required('Поле страна является обязательным'),
-  city: yup
-    .string()
-    .max(255, 'Поле город не должно содержать более 255 символов')
-    .required('Поле город является обязательным'),
-  index: yup
-    .string()
-    .max(255, 'Поле индекс не должно содержать более 255 символов')
-    .required('Поле индекс является обязательным'),
-  address: yup
-    .string()
-    .max(255, 'Поле адрес не должно содержать более 255 символов')
-    .required('Поле адрес является обязательным'),
-  date: yup.string().required('Поле дата доставки является обязательным'),
-});
-
 const StepTwo: React.FC = () => {
-  const [receivingType, setReceivingType] = useState<ReceivingTypes>(ReceivingTypes.DELIVERY);
-
-  const { setValues, data } = useData();
+  const [resultModalIsActive, setResultModalActive] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { formData, setFormData } = useFormData();
   const history = useHistory();
-  const { register, handleSubmit, errors } = useForm({
-    defaultValues: {
-      country: data.country,
-      city: data.city,
-      index: data.index,
-      address: data.address,
-      date: data.date,
-    },
-    mode: 'all',
+
+  const schema = yup.object().shape({
+    country: yup.string().when('isDelivery', {
+      is: true,
+      then: yup.string().required('Поле страна является обязательным'),
+    }),
+    city: yup.string().when('isDelivery', {
+      is: true,
+      then: yup
+        .string()
+        .required('Поле город является обязательным')
+        .max(255, 'Поле город не должно содержать более 255 символов'),
+    }),
+    index: yup.string().when('isDelivery', {
+      is: true,
+      then: yup
+        .string()
+        .required('Поле индекс является обязательным')
+        .max(6, 'Поле индекс не должно содержать более 6 символов'),
+    }),
+    address: yup.string().when('isDelivery', {
+      is: true,
+      then: yup
+        .string()
+        .required('Поле адрес является обязательным')
+        .max(255, 'Поле адрес не должно содержать более 255 символов'),
+    }),
+
+    date: yup.string().when('isDelivery', {
+      is: true,
+      then: yup.string().required('Поле дата доставки является обязательным'),
+    }),
+  });
+
+  const createDefaultStepTwoValues = () => ({
+    country: '',
+    city: '',
+    index: '',
+    address: '',
+    date: '',
+    isDelivery: true,
+  });
+
+  const { register, handleSubmit, errors, control, watch } = useForm({
+    defaultValues: createDefaultStepTwoValues(),
+    mode: 'onTouched',
     resolver: yupResolver(schema),
   });
 
+  const isDelivery = watch('isDelivery');
+
+  const onSubmit = (data: FormProperties, event?: React.BaseSyntheticEvent) => {
+    setFormData(data);
+    setIsSubmitted(true);
+  };
+
+  const sendFormData = (data: FormProperties) => {
+    setIsSubmitted(false);
+    const http = new XMLHttpRequest();
+    const url = 'test.php';
+    http.open('POST', url, true);
+    http.setRequestHeader('Content-type', 'application/json');
+    http.send(JSON.stringify(data));
+    setIsLoading(true);
+
+    http.onload = () => {
+      setIsLoading(false);
+      const { success } = JSON.parse(http.responseText);
+      setIsSuccess(success);
+
+      if (success) {
+        setTimeout(() => {
+          window.location.replace('/')
+        }, 5000);
+      }
+      setResultModalActive(true);
+    };
+  };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      sendFormData(formData);
+    }
+    if (!isDelivery) {
+      setFormData({ ...createDefaultStepTwoValues(), isDelivery: false });
+    }
+  }, [isDelivery, isSubmitted]);
+
+  const backToPrevStepHandler = () => {
+    setFormData(createDefaultStepTwoValues());
+    history.push('/');
+  };
+
   return (
     <StyledMainContainer>
+      <ResultModal active={resultModalIsActive} setActive={(value) => setResultModalActive(value)}>
+        {isSuccess && (
+          <StyledModalText>
+            <img alt="success" src="https://img.icons8.com/color/96/000000/checkmark--v1.png" />
+            <span>Заказ успешно отправлен</span>
+          </StyledModalText>
+        )}
+        {!isSuccess && (
+          <StyledModalText>
+            <img alt="failure" src="https://img.icons8.com/emoji/96/000000/cross-mark-emoji.png" />
+            <div>Произошла ошибка</div>
+            <div>Пожалуйста попробуйте позже</div>
+          </StyledModalText>
+        )}
+      </ResultModal>
       <StyledStepHeader>Адрес доставки</StyledStepHeader>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormButtonGroup onChange={(value) => setReceivingType(value)} />
-        {receivingType === ReceivingTypes.DELIVERY && (
+        <Controller
+          name="isDelivery"
+          control={control}
+          render={({ onChange }) => (
+            <FormButtonGroup onChange={(value) => onChange(value === ReceivingTypes.DELIVERY)} />
+          )}
+        />
+        {isDelivery && (
           <>
             <StyledInputGroupRow>
               <FormDataList
@@ -147,16 +225,22 @@ const StepTwo: React.FC = () => {
             />
           </>
         )}
+
         <FormTextArea
           label="Комментарий к заказу"
           placeholder="Ваш комментарий здесь..."
           name="comment"
-          ref={register}
         />
         <StyledFormActions>
-          <PrimaryButton type="submit">Оформить заказ</PrimaryButton>
+          <PrimaryButton type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <Loader type="Puff" color="#ffffff" height={24} width={24} />
+            ) : (
+              <div>Оформить заказ</div>
+            )}
+          </PrimaryButton>
           <StyledDivider>Или</StyledDivider>
-          <SecondaryButton onClick={() => history.push('/')} type="button">
+          <SecondaryButton onClick={backToPrevStepHandler} type="reset">
             Вернуться
           </SecondaryButton>
         </StyledFormActions>
