@@ -1,11 +1,12 @@
 import * as yup from 'yup';
 import { isValidPhoneNumber, normalizePhoneNumber } from './normilize-phone-number';
+import { FormSchema } from '../../context/DataContext';
 
-export const createDefaultStepOneValues = (): Record<string, string> => ({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
+export const createDefaultStepOneValues = (data: FormSchema): Record<string, string> => ({
+  firstName: data.firstName || '',
+  lastName: data.lastName || '',
+  email: data.email || '',
+  phone: data.phone || '',
 });
 
 const schema = yup.object().shape({

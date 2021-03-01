@@ -1,13 +1,14 @@
 import * as yup from 'yup';
+import { FormSchema } from '../../context/DataContext';
 
-export const createDefaultStepTwoValues = (): Record<string & boolean, string> => ({
-  country: '',
-  city: '',
-  index: '',
-  address: '',
-  date: '',
-  comment: '',
-  isDelivery: true,
+export const createDefaultStepTwoValues = (data: FormSchema | Record<string, string>): Record<string & boolean, string> => ({
+  country: data.country || '',
+  city: data.city || '',
+  index: data.index || '',
+  address: data.address || '',
+  date: data.date || '',
+  comment: data.comment || '',
+  isDelivery: data.isDelivery || true,
 });
 
 const schema = yup.object().shape({

@@ -12,11 +12,11 @@ import schema, { createDefaultStepOneValues } from './schema';
 import { normalizePhoneNumber } from './normilize-phone-number';
 
 const StepOne: React.FC = () => {
-  const { setFormData } = useFormData();
+  const { formData, setFormData } = useFormData();
   const history = useHistory();
 
   const { register, handleSubmit, errors } = useForm<FormSchema>({
-    defaultValues: createDefaultStepOneValues(),
+    defaultValues: createDefaultStepOneValues(formData),
     mode: 'onTouched',
     resolver: yupResolver(schema),
   });

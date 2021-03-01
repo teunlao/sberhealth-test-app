@@ -63,7 +63,7 @@ const StepTwo: React.FC = () => {
   const history = useHistory();
 
   const { register, handleSubmit, errors, control, watch } = useForm<FormSchema>({
-    defaultValues: createDefaultStepTwoValues(),
+    defaultValues: createDefaultStepTwoValues({}),
     mode: 'onTouched',
     resolver: yupResolver(schema),
   });
@@ -103,12 +103,12 @@ const StepTwo: React.FC = () => {
       sendFormData(formData);
     }
     if (!isDelivery) {
-      setFormData(createDefaultStepTwoValues());
+      setFormData(createDefaultStepTwoValues({}));
     }
   }, [isDelivery, isSubmitted]);
 
   const backToPrevStepHandler = () => {
-    setFormData(createDefaultStepTwoValues());
+    setFormData(createDefaultStepTwoValues({}));
     history.push('/');
   };
 
