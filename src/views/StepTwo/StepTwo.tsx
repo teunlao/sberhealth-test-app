@@ -133,7 +133,7 @@ const StepTwo: React.FC = () => {
 
       if (success) {
         setTimeout(() => {
-          window.location.replace('/')
+          window.location.replace('/');
         }, 5000);
       }
       setResultModalActive(true);
@@ -188,6 +188,7 @@ const StepTwo: React.FC = () => {
                 errorMessage={errors?.country?.message}
                 name="country"
                 placeholder="Россия"
+                ariaLabel="Поле ввода страны с авто-дополнением"
                 ref={register}
               />
               <FormTextField
@@ -195,6 +196,7 @@ const StepTwo: React.FC = () => {
                 errorMessage={errors?.city?.message}
                 placeholder="Москва"
                 name="city"
+                ariaLabel="Поле ввода города"
                 type="text"
                 ref={register}
               />
@@ -203,6 +205,7 @@ const StepTwo: React.FC = () => {
                 errorMessage={errors?.index?.message}
                 placeholder="398000"
                 name="index"
+                ariaLabel="Поле ввода индекса"
                 type="text"
                 ref={register}
               />
@@ -212,6 +215,7 @@ const StepTwo: React.FC = () => {
               placeholder="г. Москва, ул. Космонавтов, 14/5"
               errorMessage={errors?.address?.message}
               name="address"
+              ariaLabel="Поле ввода адреса доставки"
               type="text"
               ref={register}
             />
@@ -220,6 +224,7 @@ const StepTwo: React.FC = () => {
               placeholder="25/03/2021"
               errorMessage={errors?.date?.message}
               name="date"
+              ariaLabel="Поле ввода даты доставки"
               type="date"
               ref={register}
             />
@@ -228,11 +233,12 @@ const StepTwo: React.FC = () => {
 
         <FormTextArea
           label="Комментарий к заказу"
+          ariaLabel="Поле ввода дополнительных комментариев"
           placeholder="Ваш комментарий здесь..."
           name="comment"
         />
         <StyledFormActions>
-          <PrimaryButton type="submit" disabled={isLoading}>
+          <PrimaryButton type="submit" disabled={isLoading} aria-label="Кнопка оформления заказа">
             {isLoading ? (
               <Loader type="Puff" color="#ffffff" height={24} width={24} />
             ) : (
@@ -240,7 +246,11 @@ const StepTwo: React.FC = () => {
             )}
           </PrimaryButton>
           <StyledDivider>Или</StyledDivider>
-          <SecondaryButton onClick={backToPrevStepHandler} type="reset">
+          <SecondaryButton
+            onClick={backToPrevStepHandler}
+            type="reset"
+            aria-label="Вернуться на основной этап формы"
+          >
             Вернуться
           </SecondaryButton>
         </StyledFormActions>

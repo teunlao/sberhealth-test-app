@@ -12,11 +12,12 @@ interface FormDataListProps {
   name: string;
   placeholder?: string;
   errorMessage?: string;
+  ariaLabel?: string;
   onChange?: React.ChangeEventHandler<HTMLDataListElement | any>;
 }
 
 const FormDataList = forwardRef<HTMLInputElement, FormDataListProps>(
-  ({ label, name, placeholder, errorMessage, onChange }, ref) => (
+  ({ label, name, placeholder, ariaLabel, errorMessage, onChange }, ref) => (
     <StyledFormInputWrapper>
       <StyledInputContainer>
         <StyledLabel htmlFor={`input-${name}`} isError={!!errorMessage}>
@@ -24,6 +25,7 @@ const FormDataList = forwardRef<HTMLInputElement, FormDataListProps>(
         </StyledLabel>
         <StyledInput
           list={`input_${name}`}
+          aria-label={ariaLabel}
           id={`input-${name}`}
           name={name}
           placeholder={placeholder}

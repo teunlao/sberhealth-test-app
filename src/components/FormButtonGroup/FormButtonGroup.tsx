@@ -35,6 +35,7 @@ const FormButtonGroup: React.FC<FormButtonGroupProps> = ({ onChange }) => {
       <StyledFormButtonGroup>
         <SecondaryButton
           ref={deliveryBtn}
+          aria-label="Выбрать способ получения - доставку"
           onClick={() => setReceivingType(ReceivingTypes.DELIVERY)}
           type="button"
           active={receivingType === ReceivingTypes.DELIVERY}
@@ -43,6 +44,7 @@ const FormButtonGroup: React.FC<FormButtonGroupProps> = ({ onChange }) => {
         </SecondaryButton>
         <SecondaryButton
           ref={pickupBtn}
+          aria-label="Выбрать способ получения - самовывоз"
           onClick={() => setReceivingType(ReceivingTypes.PICKUP)}
           type="button"
           active={receivingType === ReceivingTypes.PICKUP}

@@ -11,6 +11,7 @@ interface FormInputProps {
   type?: string;
   placeholder?: string;
   errorMessage?: string;
+  ariaLabel?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
 }
 
@@ -36,7 +37,7 @@ const StyledTextArea = styled.textarea<{ isError?: boolean }>`
 `;
 
 const FormTextArea = forwardRef<HTMLTextAreaElement, FormInputProps>(
-  ({ label, name, type, placeholder, errorMessage, onChange }, ref) => (
+  ({ label, name, type, placeholder, ariaLabel, errorMessage, onChange }, ref) => (
     <StyledFormInputWrapper>
       <StyledInputContainer>
         <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>
@@ -44,6 +45,7 @@ const FormTextArea = forwardRef<HTMLTextAreaElement, FormInputProps>(
         </StyledLabel>
         <StyledTextArea
           name={name}
+          aria-label={ariaLabel}
           placeholder={placeholder}
           id={`input_${name}`}
           ref={ref}

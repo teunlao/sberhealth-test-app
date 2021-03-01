@@ -72,6 +72,7 @@ const StepOne: React.FC = () => {
         <FormTextField
           label="Имя"
           placeholder="Иван"
+          ariaLabel="Поле ввода имени"
           errorMessage={errors?.firstName?.message}
           name="firstName"
           type="text"
@@ -80,6 +81,7 @@ const StepOne: React.FC = () => {
         <FormTextField
           label="Фамилия"
           placeholder="Иванов"
+          ariaLabel="Поле ввода фамилии"
           errorMessage={errors?.lastName?.message}
           name="lastName"
           type="text"
@@ -88,6 +90,7 @@ const StepOne: React.FC = () => {
         <FormTextField
           label="Телефон"
           placeholder="+7 904 652 23 24"
+          ariaLabel="Поле ввода номера телефона"
           errorMessage={errors?.phone?.message}
           name="phone"
           type="tel"
@@ -99,12 +102,15 @@ const StepOne: React.FC = () => {
         <FormTextField
           label="Email"
           placeholder="example@example.com"
+          ariaLabel="Поле ввода электронной почты"
           errorMessage={errors?.email?.message}
           name="email"
           type="email"
           ref={register}
         />
-        <PrimaryButton type="submit">Продолжить</PrimaryButton>
+        <PrimaryButton aria-label="Кнопка перехода на этап оформления доставки" type="submit">
+          Продолжить
+        </PrimaryButton>
       </Form>
     </StyledMainContainer>
   );
