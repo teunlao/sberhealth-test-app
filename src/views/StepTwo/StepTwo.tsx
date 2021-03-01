@@ -3,9 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import Form from '../../components/Form/Form';
-import { FormProperties, useFormData } from '../../DataContext/DataContext';
+import { FormSchema, useFormData } from '../../context/DataContext';
 import FormButtonGroup, { ReceivingTypes } from '../../components/FormButtonGroup/FormButtonGroup';
 import StyledMainContainer from '../../components/styled/StyledMainContainer';
 import StyledStepHeader from '../../components/styled/StyledStepHeader';
@@ -16,6 +15,7 @@ import SecondaryButton from '../../components/styled/SecondaryButton';
 import FormDataList from '../../components/FormDataList/FormDataList';
 import FormTextField from '../../components/FornTextField/FormTextField';
 import ResultModal from '../../components/ResultModal/ResultModal';
+import schema, { createDefaultStepTwoValues } from './schema';
 
 const StyledModalText = styled.div`
   display: flex;
@@ -62,49 +62,7 @@ const StepTwo: React.FC = () => {
   const { formData, setFormData } = useFormData();
   const history = useHistory();
 
-  const schema = yup.object().shape({
-    country: yup.string().when('isDelivery', {
-      is: true,
-      then: yup.string().required('Поле страна является обязательным'),
-    }),
-    city: yup.string().when('isDelivery', {
-      is: true,
-      then: yup
-        .string()
-        .required('Поле город является обязательным')
-        .max(255, 'Поле город не должно содержать более 255 символов'),
-    }),
-    index: yup.string().when('isDelivery', {
-      is: true,
-      then: yup
-        .string()
-        .required('Поле индекс является обязательным')
-        .max(6, 'Поле индекс не должно содержать более 6 символов'),
-    }),
-    address: yup.string().when('isDelivery', {
-      is: true,
-      then: yup
-        .string()
-        .required('Поле адрес является обязательным')
-        .max(255, 'Поле адрес не должно содержать более 255 символов'),
-    }),
-
-    date: yup.string().when('isDelivery', {
-      is: true,
-      then: yup.string().required('Поле дата доставки является обязательным'),
-    }),
-  });
-
-  const createDefaultStepTwoValues = () => ({
-    country: '',
-    city: '',
-    index: '',
-    address: '',
-    date: '',
-    isDelivery: true,
-  });
-
-  const { register, handleSubmit, errors, control, watch } = useForm({
+  const { register, handleSubmit, errors, control, watch } = useForm<FormSchema>({
     defaultValues: createDefaultStepTwoValues(),
     mode: 'onTouched',
     resolver: yupResolver(schema),
@@ -112,12 +70,12 @@ const StepTwo: React.FC = () => {
 
   const isDelivery = watch('isDelivery');
 
-  const onSubmit = (data: FormProperties, event?: React.BaseSyntheticEvent) => {
+  const onSubmit = (data: FormSchema) => {
     setFormData(data);
     setIsSubmitted(true);
   };
 
-  const sendFormData = (data: FormProperties) => {
+  const sendFormData = (data: FormSchema) => {
     setIsSubmitted(false);
     const http = new XMLHttpRequest();
     const url = 'test.php';
@@ -145,7 +103,7 @@ const StepTwo: React.FC = () => {
       sendFormData(formData);
     }
     if (!isDelivery) {
-      setFormData({ ...createDefaultStepTwoValues(), isDelivery: false });
+      setFormData(createDefaultStepTwoValues());
     }
   }, [isDelivery, isSubmitted]);
 
@@ -233,9 +191,11 @@ const StepTwo: React.FC = () => {
 
         <FormTextArea
           label="Комментарий к заказу"
+          name="comment"
+          errorMessage={errors?.comment?.message}
           ariaLabel="Поле ввода дополнительных комментариев"
           placeholder="Ваш комментарий здесь..."
-          name="comment"
+          ref={register}
         />
         <StyledFormActions>
           <PrimaryButton type="submit" disabled={isLoading} aria-label="Кнопка оформления заказа">

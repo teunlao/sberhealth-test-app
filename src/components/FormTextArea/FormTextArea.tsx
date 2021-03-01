@@ -37,7 +37,7 @@ const StyledTextArea = styled.textarea<{ isError?: boolean }>`
 `;
 
 const FormTextArea = forwardRef<HTMLTextAreaElement, FormInputProps>(
-  ({ label, name, type, placeholder, ariaLabel, errorMessage, onChange }, ref) => (
+  ({ label, name, placeholder, ariaLabel, errorMessage, onChange }, ref) => (
     <StyledFormInputWrapper>
       <StyledInputContainer>
         <StyledLabel htmlFor={`input_${name}`} isError={!!errorMessage}>

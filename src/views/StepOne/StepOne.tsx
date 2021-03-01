@@ -1,66 +1,27 @@
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import React from 'react';
-import parsePhoneNumberFromString, { isValidPhoneNumber, AsYouType } from 'libphonenumber-js';
 import Form from '../../components/Form/Form';
 import FormTextField from '../../components/FornTextField/FormTextField';
-import { FormProperties, useFormData } from '../../DataContext/DataContext';
+import { FormSchema, useFormData } from '../../context/DataContext';
 import StyledMainContainer from '../../components/styled/StyledMainContainer';
 import PrimaryButton from '../../components/styled/PrimaryButton';
 import StyledStepHeader from '../../components/styled/StyledStepHeader';
-
-const normalizePhoneNumber = (value: string): string => {
-  const phoneString = new AsYouType('RU').input(value);
-
-  if (isValidPhoneNumber(phoneString, 'RU')) {
-    const phoneNumber = parsePhoneNumberFromString(phoneString, 'RU');
-    if (phoneNumber) {
-      return phoneNumber.formatInternational();
-    }
-  }
-
-  return phoneString;
-};
-
-const schema = yup.object().shape({
-  firstName: yup
-    .string()
-    .max(255, 'Поле имя не должно содержать более 255 символов')
-    .required('Поле имя является обязательным'),
-  lastName: yup
-    .string()
-    .max(255, 'Поле фамилия не должно содержать более 255 символов')
-    .required('Поле фамилия является обязательным'),
-  email: yup
-    .string()
-    .email('Email должен иметь корректный  формат')
-    .required('Поле email является обязательным'),
-  phone: yup
-    .string()
-    .required('Поле телефон является обязательным')
-    .test('phone', 'Поле телефон должно иметь корректный  формат', (value = '') =>
-      isValidPhoneNumber(normalizePhoneNumber(value)),
-    ),
-});
+import schema, { createDefaultStepOneValues } from './schema';
+import { normalizePhoneNumber } from './normilize-phone-number';
 
 const StepOne: React.FC = () => {
-  const { formData, setFormData } = useFormData();
+  const { setFormData } = useFormData();
   const history = useHistory();
 
-  const { register, handleSubmit, errors } = useForm({
-    defaultValues: {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phone: formData.phone,
-    },
+  const { register, handleSubmit, errors } = useForm<FormSchema>({
+    defaultValues: createDefaultStepOneValues(),
     mode: 'onTouched',
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: FormProperties) => {
+  const onSubmit = (data: FormSchema) => {
     setFormData(data);
     history.push('./step2');
   };

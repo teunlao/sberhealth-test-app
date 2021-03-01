@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 
-export interface FormProperties {
+export interface FormSchema {
   firstName: string;
   lastName: string;
   email: string;
@@ -10,12 +10,13 @@ export interface FormProperties {
   index: string;
   address: string;
   date: string;
-  isDelivery: string;
+  comment: string;
+  isDelivery: boolean;
 }
 
 export type DispatchFormData = {
-  formData: FormProperties;
-  setFormData: (value: FormProperties | Record<string & boolean, string>) => void;
+  formData: FormSchema;
+  setFormData: (value: FormSchema | Record<string & boolean, string>) => void;
 };
 
 const DataContext = createContext({});

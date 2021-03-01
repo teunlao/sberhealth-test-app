@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import DataProvider from './DataContext/DataContext';
+import DataProvider from './context/DataContext';
 import AppTheme from './components/styled/AppTheme';
 
 const StepOne = lazy(() => import('./views/StepOne/StepOne'));
