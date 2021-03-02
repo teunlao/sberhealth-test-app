@@ -16,6 +16,7 @@ import FormDataList from '../../components/FormDataList/FormDataList';
 import FormTextField from '../../components/FornTextField/FormTextField';
 import ResultModal from '../../components/ResultModal/ResultModal';
 import schema, { createDefaultStepTwoValues } from './schema';
+import api from '../../api/index';
 
 const StyledModalText = styled.div`
   display: flex;
@@ -75,33 +76,28 @@ const StepTwo: React.FC = () => {
     setIsSubmitted(true);
   };
 
-  const sendFormData = (data: FormSchema) => {
-    setIsSubmitted(false);
-    const http = new XMLHttpRequest();
-    const url = 'test.php';
-    http.open('POST', url, true);
-    http.setRequestHeader('Content-type', 'application/json');
-    http.send(JSON.stringify(data));
-    setIsLoading(true);
-
-    http.onload = () => {
-      setIsLoading(false);
-      const { success } = JSON.parse(http.responseText);
-      setIsSuccess(success);
-
-      if (success) {
-        setTimeout(() => {
-          window.location.replace('/');
-        }, 5000);
-      }
-      setResultModalActive(true);
-    };
-  };
-
   useEffect(() => {
     if (isSubmitted) {
-      sendFormData(formData);
+      (async () => {
+        try {
+          setIsSubmitted(false);
+          setIsLoading(true);
+          const { success } = await api.sendFormData(formData);
+          if (success) {
+            setTimeout(() => {
+              window.location.replace('/');
+            }, 5000);
+          }
+          setIsSuccess(success);
+        } catch (error) {
+          setIsSuccess(false);
+        } finally {
+          setIsLoading(false);
+          setResultModalActive(true);
+        }
+      })();
     }
+
     if (!isDelivery) {
       setFormData(createDefaultStepTwoValues({}));
     }
